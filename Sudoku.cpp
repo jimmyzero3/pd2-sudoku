@@ -4,9 +4,11 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
+
 using namespace std;
 
-		Sudoku::Sudoku()
+
+			Sudoku::Sudoku()
 			{
 				for(int i=0;i<81;i++)
 					{Board[i]=0;}
@@ -14,7 +16,7 @@ using namespace std;
 				ansnum=0;
 			}
 
-		Sudoku::Sudoku(const int MakeBoard[])
+			Sudoku::Sudoku(const int MakeBoard[])
 			{
 				for(int i=0;i<81;i++)
 					{Board[i]=MakeBoard[i];}
@@ -47,7 +49,6 @@ using namespace std;
 					
 					return true;
 				}
-
 		bool Sudoku::CheckReadIn(int FirstZero, int value)
 				{
 
@@ -70,8 +71,15 @@ using namespace std;
 
 		void Sudoku::giveQuestion()
 				{
-
-					cout<<"5 0 0 1 0 0 0 0 0 0 9 6 0 0 0 8 2 0 0 0 0 0 0 7 0 0 9 0 0 0 0 0 3 0 0 6 0 7 4 0 0 0 9 1 0 2 0 0 5 0 0 0 0 0 7 0 0 6 0 0 0 0 0 0 8 3 0 0 0 5 7 0 0 0 0 0 0 4 0 0 1";
+					int Question[81]={
+					5,0,0,1,0,0,0,0,0,0,9,6,0,0,0,8,2,0,0,0,0,0,0,7,0,0,9,0,0,0 ,0 ,0 ,3 ,0 ,0 ,6 ,0 ,7 ,4 ,0 ,0 ,0 ,9 ,1 ,0 ,2 ,0 ,0 ,5 ,0 ,0 ,0 ,0 ,0 ,7 ,0 ,0 ,6 ,0 ,0 ,0 ,0 ,0 ,0 ,8 ,3 ,0 ,0 ,0 ,5 ,7 ,0 ,0 ,0, 0, 0, 0, 4, 0, 0, 1
+					};
+						for(int i=0;i<81;i++)
+						{
+							cout<<Question[i]<<" ";
+								if(i%9==8)
+									cout<<endl;
+						}
 
 				}
 
@@ -99,10 +107,8 @@ using namespace std;
                             ++ColMem[(i%9)][Board[i]-1];
                             ++BlockMem[((i%9)/3+((i/9)/3)*3)][Board[i]-1];
                             //~
-
 						}
 				}
-
 
 		void Sudoku::Display()
 				{
@@ -124,9 +130,10 @@ using namespace std;
 						}
 				}
 
+
 		bool Sudoku::solve()
-				{
-					for(int i=0;i<81;i++)
+		{
+								for(int i=0;i<81;i++)
 					{
 						    if(CheckReadIn(i,Board[i])==false)
                             {
@@ -135,16 +142,25 @@ using namespace std;
                             }
 
 					}
-					Solve();
-					if(ansnum==1)
-						{
-							cout<<ansnum<<endl;	
-							DisplayAns();
-						}
-					else
-					cout<<"2";
+			if(GetFirstZeroIndex()==-1)
+			{
+				cout<<"1"<<endl;
+				Display();
+				return false;
+			}
 
-				}
+			Solve();
+			if(ansnum==0)
+				cout<<"0";
+			else if(ansnum==1)
+			{
+				cout<<ansnum<<endl;	
+				DisplayAns();
+			}	
+			else if(ansnum>1)
+			cout<<"2";
+
+		}
 
 		bool Sudoku::Solve()
 				{
@@ -163,6 +179,7 @@ using namespace std;
 							{
 								Ans[i]=Board[i];
 							}
+							//DisplayAns();
 							return true;
 						}
 
@@ -186,7 +203,12 @@ using namespace std;
                                     //~
 
                                     if(Solve())
+                                    {
                                         ansnum++;
+          
+                                    }   
+                                        //if(ansnum>1);
+                                        //return true;
 
                                     //~
                                     --RowMem[(FirstZero/9)][num-1];
@@ -259,10 +281,15 @@ using namespace std;
 					for(int i=0;i<81;i++)
 					{
 						if(Board[i] == a)
+						{
 							Board[i] = b;
-
+							continue;
+						}
 						if(Board[i] == b)
+						{
 							Board[i] = a;
+							continue;
+						}
 					}
 
 				}
@@ -347,7 +374,7 @@ using namespace std;
 		        {
 		            Row=i%9;
 		            Col=i/9;
-		            if(n==1)
+		            if(n!=0)
 		            {
 		                if (Row>=4)
 		                {
